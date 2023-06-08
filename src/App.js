@@ -7,6 +7,7 @@
   import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
   import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
   import Rank from "./components/Rank/Rank";
+  import SignIn from "./components/Sign-In/Sign-in";
   import "tachyons";
 
 
@@ -52,12 +53,13 @@
     const [imageUrl, setImageUrl] = useState("");
     const [recognitionBox, setRecognitionBox] = useState("");
 
-    const calculateRecognitionBox = (data) =>{
-     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const calculateRecognitionBox = (boundingBoxData) =>{
+     const clarifaiFace = boundingBoxData.outputs[0].data.regions[0].region_info.bounding_box;
      const image = document.getElementById("inputImage");
      const width = Number(image.width);
      const height = Number(image.height);
      console.log("Image data are: ", width, height);
+
      return {
         leftCol: clarifaiFace.left_col * width,
         topRow: clarifaiFace.top_row * height,
@@ -84,7 +86,6 @@
           .catch(error => console.log('error', error));
     }
 
-
     return (
       <div className="App">
         <ParticlesBg 
@@ -94,10 +95,11 @@
           num={200}
            />
         <Navigation />
+        <SignIn />
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
-        <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox}/>
+        <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
       </div>
     );
   }
