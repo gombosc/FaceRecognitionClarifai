@@ -8,6 +8,7 @@
   import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
   import Rank from "./components/Rank/Rank";
   import SignIn from "./components/Sign-In/Sign-in";
+  import Register from "./components/Register/Register";
   import "tachyons";
 
 
@@ -52,6 +53,7 @@
     const [inputText, setInputText] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [recognitionBox, setRecognitionBox] = useState("");
+    const [route, setRoute] = useState("signIn");
 
     const calculateRecognitionBox = (boundingBoxData) =>{
      const clarifaiFace = boundingBoxData.outputs[0].data.regions[0].region_info.bounding_box;
@@ -86,20 +88,29 @@
           .catch(error => console.log('error', error));
     }
 
+    const onRouteChange = (route) => {
+      setRoute(route);
+    }
+
     return (
       <div className="App">
         <ParticlesBg 
           className="particles-bg-canvas-self"
           type="square" 
           bg={true} 
-          num={200}
-           />
-        <Navigation />
-        <SignIn />
-        <Logo />
-        <Rank />
-        <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
-        <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
+          num={200} />
+        { route === "face-detection-app" ? 
+            <>
+                <Navigation onRouteChange = {onRouteChange} />
+                <Logo />
+                <Rank />
+                <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
+                <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
+             </>
+             : ( route === "signIn" 
+                  ? <SignIn onRouteChange = {onRouteChange} />
+                  :  <Register onRouteChange = {onRouteChange} />)    
+         }
       </div>
     );
   }

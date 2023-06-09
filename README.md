@@ -28,4 +28,8 @@ Progress:
 
 9. Test to see if box works with any image (Verified, it works)
 
-10. Add Sign In Page and form
+10. Add Sign In Page and Register, 1 new state: route - which verifies on which page we are (Functional)
+
+11. Finished Front-End Part, moving to Backend and Node
+
+12. Working on Node
