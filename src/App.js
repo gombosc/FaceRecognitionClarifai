@@ -1,5 +1,6 @@
   import React from "react";
-  import { useState } from "react";
+  import { useState} from "react";
+  import { componentDidMount} from "react";
   import ParticlesBg from 'particles-bg';
   import './App.css';
   import Navigation from "./components/Navigation/Navigation";
@@ -48,12 +49,19 @@
   return requestOptions;
   }
 
-
+ 
   function App() { 
     const [inputText, setInputText] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [recognitionBox, setRecognitionBox] = useState("");
     const [route, setRoute] = useState("signIn");
+
+    componentDidMount(){
+      fetch("http://http://localhost:3001/")
+      .then(response => response.json())
+      .then(console.log)
+  }
+
 
     const calculateRecognitionBox = (boundingBoxData) =>{
      const clarifaiFace = boundingBoxData.outputs[0].data.regions[0].region_info.bounding_box;

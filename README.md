@@ -32,4 +32,9 @@ Progress:
 
 11. Finished Front-End Part, moving to Backend and Node
 
-12. Working on Node
+12. Working on Node (leaarnt to work with servers - Express)
+
+13. Back-End side (working on the API with Postman)
+- installed bcrypt-nodejs for hashing passwords
+
+14. Connecting front end with backend (installing cors package too for CORS error when fetching from http to https)
