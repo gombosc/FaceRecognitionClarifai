@@ -1,6 +1,5 @@
   import React from "react";
-  import { useState} from "react";
-  import { componentDidMount} from "react";
+  import { useState, useEffect} from "react";  
   import ParticlesBg from 'particles-bg';
   import './App.css';
   import Navigation from "./components/Navigation/Navigation";
@@ -56,11 +55,9 @@
     const [recognitionBox, setRecognitionBox] = useState("");
     const [route, setRoute] = useState("signIn");
 
-    componentDidMount(){
-      fetch("http://http://localhost:3001/")
-      .then(response => response.json())
-      .then(console.log)
-  }
+    useEffect( () => {
+      fetch("http://localhost:3000/").then(resp => resp.json()).then(console.log)
+    }, []);
 
 
     const calculateRecognitionBox = (boundingBoxData) =>{
