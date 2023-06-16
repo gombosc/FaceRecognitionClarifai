@@ -48,16 +48,35 @@
   return requestOptions;
   }
 
+  
  
   function App() { 
     const [inputText, setInputText] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [recognitionBox, setRecognitionBox] = useState("");
     const [route, setRoute] = useState("signIn");
+    const [userData, updateUserData] = useState({
+      id: "",
+      name: "",
+      email: "",
+      password: "",
+      entries: "",
+      joined: ""
+    });
 
-    useEffect( () => {
-      fetch("http://localhost:3000/").then(resp => resp.json()).then(console.log)
-    }, []);
+    const loadUserData = (data) =>{
+      updateUserData({
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      entries: data.entries,
+      joined: data.newDate
+      })
+    }
+    // useEffect( () => {
+    //   fetch("http://localhost:3000/").then(resp => resp.json()).then(console.log)
+    // }, []);
 
 
     const calculateRecognitionBox = (boundingBoxData) =>{
@@ -114,7 +133,7 @@
              </>
              : ( route === "signIn" 
                   ? <SignIn onRouteChange = {onRouteChange} />
-                  :  <Register onRouteChange = {onRouteChange} />)    
+                  :  <Register loadUserData={loadUserData} onRouteChange = {onRouteChange} />)    
          }
       </div>
     );
