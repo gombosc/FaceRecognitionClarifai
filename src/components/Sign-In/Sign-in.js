@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Sign-in.css";
 
-const SignIn = ({onRouteChange}) =>{
+const SignIn = ({onRouteChange, loadUserData}) =>{
     const [ signInEmail, setSignInEmail ] = useState("");
     const [ signInPassword, setSignInPassword ] = useState("");
 
@@ -22,10 +22,12 @@ const SignIn = ({onRouteChange}) =>{
                 password: signInPassword
             })
         })
-        .then(response => response.text())
-        .then(data => {
-            if (data === 'Success'){
-               onRouteChange("face-detection-app")
+        .then(response => response.json())
+        .then(user => {
+            // Does the user exist? Did we receive it from the server?
+            if (user.id){
+                loadUserData(user);
+                onRouteChange("face-detection-app")
             }
         }) 
         .catch(error => console.log(error));

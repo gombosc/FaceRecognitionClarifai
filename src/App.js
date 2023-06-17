@@ -48,19 +48,20 @@
   return requestOptions;
   }
 
-  
+
  
   function App() { 
     const [inputText, setInputText] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [recognitionBox, setRecognitionBox] = useState("");
     const [route, setRoute] = useState("signIn");
+    const [isSignedIn, setIsSignedIn] = useState(false);
     const [userData, updateUserData] = useState({
       id: "",
       name: "",
       email: "",
       password: "",
-      entries: "",
+      entries: 0,
       joined: ""
     });
 
@@ -71,7 +72,7 @@
       email: data.email,
       password: data.password,
       entries: data.entries,
-      joined: data.newDate
+      joined: data.joined
       })
     }
     // useEffect( () => {
@@ -105,10 +106,26 @@
 
     const onButtonSubmit =() =>{
       setImageUrl(inputText);
-      console.log("This is the input text " + inputText);
       fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(inputText))
           .then(response => response.json())
-          .then(boundingBox => displayFaceBox(calculateRecognitionBox(boundingBox)))
+          .then(boundingBox =>{
+            if(boundingBox){
+                fetch("http://localhost:3000/image/", {
+              method: "put",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({
+                  id : userData.id
+                })
+             })
+             .then(response => response.json())
+             .then(count => {
+              updateUserData({...userData,
+                              entries: count})
+              })
+            }
+
+             displayFaceBox(calculateRecognitionBox(boundingBox))
+            })
           .catch(error => console.log('error', error));
     }
 
@@ -127,12 +144,12 @@
             <>
                 <Navigation onRouteChange = {onRouteChange} />
                 <Logo />
-                <Rank />
+                <Rank name={userData.name} entries={userData.entries} />
                 <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
                 <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
              </>
              : ( route === "signIn" 
-                  ? <SignIn onRouteChange = {onRouteChange} />
+                  ? <SignIn loadUserData={loadUserData} onRouteChange = {onRouteChange} />
                   :  <Register loadUserData={loadUserData} onRouteChange = {onRouteChange} />)    
          }
       </div>
