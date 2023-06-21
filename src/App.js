@@ -11,7 +11,6 @@
   import Register from "./components/Register/Register";
   import "tachyons";
 
-
   const returnClarifaiRequestOptions = (imageUrl) =>{
     const PAT = '0b25009030b548bc8c18d8f6a57a83e6';
     const USER_ID = 'gombosc';       
@@ -47,23 +46,23 @@
 
   return requestOptions;
   }
-
-
  
   function App() { 
-    const [inputText, setInputText] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
-    const [recognitionBox, setRecognitionBox] = useState("");
-    const [route, setRoute] = useState("signIn");
-    const [isSignedIn, setIsSignedIn] = useState(false);
-    const [userData, updateUserData] = useState({
+    const initialUserState = {
       id: "",
       name: "",
       email: "",
       password: "",
       entries: 0,
       joined: ""
-    });
+    }
+
+    const [inputText, setInputText] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+    const [recognitionBox, setRecognitionBox] = useState("");
+    const [route, setRoute] = useState("signIn");
+    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [userData, updateUserData] = useState(initialUserState);
 
     const loadUserData = (data) =>{
       updateUserData({
@@ -122,15 +121,20 @@
               updateUserData({...userData,
                               entries: count})
               })
+              .catch(console.log())
             }
-
-             displayFaceBox(calculateRecognitionBox(boundingBox))
+            displayFaceBox(calculateRecognitionBox(boundingBox))
             })
           .catch(error => console.log('error', error));
     }
 
     const onRouteChange = (route) => {
-      setRoute(route);
+      if (route === "signIn"){
+        updateUserData(initialUserState);
+        setRoute("signIn")
+      }else{
+        setRoute(route);
+      }
     }
 
     return (

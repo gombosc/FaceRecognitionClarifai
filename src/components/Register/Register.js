@@ -29,9 +29,8 @@ const Register = ({onRouteChange, loadUserData}) =>{
         })
         .then(response => response.json())
         .then(user => {
-            if (user){
+            if (user.id){
                 loadUserData(user);
-                console.log(user);
                 onRouteChange("face-detection-app")
             }
         }) 
@@ -50,14 +49,14 @@ const Register = ({onRouteChange, loadUserData}) =>{
                         className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="name" name="name"  id="name"/>
                     </div>
                     <div className="mt3">
-                        <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                        <input onChange={onEmailRegister}
-                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="email" name="email-address"  id="email-address"/>
+                        <label className="db fw6 lh-copy f6" htmlFor="email-address" required>Email</label>
+                        <input onChange={onEmailRegister} 
+                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="email" name="email-address"  id="email-address" required/>
                     </div>
                     <div className="mv3">
                         <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
                         <input onChange={onPasswordRegister}
-                        className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password" />
+                        className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password" required/>
                     </div>
                     </fieldset>
                     <div className="">
