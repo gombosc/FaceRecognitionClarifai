@@ -5,7 +5,7 @@ const ImageLinkForm = ({onInputChange, onButtonSubmit}) =>{
     return(
         <div>
             <p className="f2">
-                {"Choose a imgae"}
+                {"Paste a image down below"}
             </p>
             <div className="center">
                 <div className="form center pa4 br5 shadow-4">

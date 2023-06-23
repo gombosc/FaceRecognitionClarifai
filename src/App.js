@@ -46,17 +46,17 @@
 
   return requestOptions;
   }
+
+  const initialUserState = {
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+    entries: 0,
+    joined: ""
+  }
  
   function App() { 
-    const initialUserState = {
-      id: "",
-      name: "",
-      email: "",
-      password: "",
-      entries: 0,
-      joined: ""
-    }
-
     const [inputText, setInputText] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [recognitionBox, setRecognitionBox] = useState("");
@@ -74,17 +74,13 @@
       joined: data.joined
       })
     }
-    // useEffect( () => {
-    //   fetch("http://localhost:3000/").then(resp => resp.json()).then(console.log)
-    // }, []);
-
-
+   
     const calculateRecognitionBox = (boundingBoxData) =>{
      const clarifaiFace = boundingBoxData.outputs[0].data.regions[0].region_info.bounding_box;
      const image = document.getElementById("inputImage");
      const width = Number(image.width);
      const height = Number(image.height);
-     console.log("Image data are: ", width, height);
+    //  console.log("Image data are: ", width, height);
 
      return {
         leftCol: clarifaiFace.left_col * width,
@@ -95,7 +91,7 @@
     }
 
     const displayFaceBox = (boxResponse) => {
-      console.log("Display Response: " , boxResponse);
+      // console.log("Display Response: " , boxResponse);
       setRecognitionBox(boxResponse);
     }
 
@@ -130,10 +126,18 @@
 
     const onRouteChange = (route) => {
       if (route === "signIn"){
+        setInputText("");
+        setImageUrl("");
+        setRecognitionBox("");
         updateUserData(initialUserState);
-        setRoute("signIn")
-      }else{
-        setRoute(route);
+        setIsSignedIn(false)
+        setRoute('signIn')
+      }
+      else if (route === 'face-detection-app'){
+        setIsSignedIn(true)
+        setRoute('face-detection-app')
+      } else{
+        setRoute('register')
       }
     }
 
@@ -144,17 +148,25 @@
           type="square" 
           bg={true} 
           num={200} />
+
         { route === "face-detection-app" ? 
             <>
-                <Navigation onRouteChange = {onRouteChange} />
+                <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route} />
                 <Logo />
                 <Rank name={userData.name} entries={userData.entries} />
                 <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
                 <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
              </>
              : ( route === "signIn" 
-                  ? <SignIn loadUserData={loadUserData} onRouteChange = {onRouteChange} />
-                  :  <Register loadUserData={loadUserData} onRouteChange = {onRouteChange} />)    
+                  ? <>
+                    <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route}/>
+                    <SignIn loadUserData={loadUserData} onRouteChange = {onRouteChange} />
+                    </>
+                  : <> 
+                  <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route}/>
+                  <Register loadUserData={loadUserData} onRouteChange = {onRouteChange} />
+                  </> )
+                    
          }
       </div>
     );
