@@ -142,32 +142,39 @@
     }
 
     return (
-      <div className="App">
-        <ParticlesBg 
-          className="particles-bg-canvas-self"
-          type="square" 
-          bg={true} 
-          num={200} />
+      <div className="App container">
+        <ParticlesBg className="particles-bg-canvas-self particles"
+          num={150}
+          type="square"
+          bg={{
+            background: "#997026",
+            position: "fixed", /* this took way too much to figure out */
+            zIndex: -1,
+            top: 0,
+            left: 0
+          }}
+          />
 
-        { route === "face-detection-app" ? 
-            <>
-                <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route} />
-                <Logo />
-                <Rank name={userData.name} entries={userData.entries} />
-                <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
-                <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
-             </>
-             : ( route === "signIn" 
-                  ? <>
+          { route === "face-detection-app" ? 
+              <>
+                  <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route} />
+                  <Logo />
+                  <Rank name={userData.name} entries={userData.entries} />
+                  <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
+                  <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />
+              </>
+              : ( route === "signIn" 
+                    ? <>
+                      <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route}/>
+                      <SignIn loadUserData={loadUserData} onRouteChange = {onRouteChange} />
+                      </>
+                    : <> 
                     <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route}/>
-                    <SignIn loadUserData={loadUserData} onRouteChange = {onRouteChange} />
-                    </>
-                  : <> 
-                  <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route}/>
-                  <Register loadUserData={loadUserData} onRouteChange = {onRouteChange} />
-                  </> )
-                    
-         }
+                    <Register loadUserData={loadUserData} onRouteChange = {onRouteChange} />
+                    </> )
+                      
+          }
+        
       </div>
     );
   }

@@ -6,11 +6,12 @@ const FaceRecognition = ({ imageUrl, recognitionBox }) =>{
         <div className="center ma">
             <div className="absolute mt2">
                 <div className="image-container">
-                    <img 
+                    <img id="inputImage"
                     id="inputImage" 
                     src={imageUrl} 
                     // style={{width: "600px", height: "400px"}} 
-                    alt="Face Input"/>
+                    />
+
                 </div>
                 <div className="face-detection-box" style={{ top: recognitionBox.topRow, right: recognitionBox.rightCol, bottom: recognitionBox.bottomRow, left: recognitionBox.leftCol }}></div>
             </div>
