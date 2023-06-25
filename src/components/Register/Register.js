@@ -4,6 +4,7 @@ const Register = ({onRouteChange, loadUserData}) =>{
     const [ registerEmail, updateEmail ] = useState("");
     const [ registerPassword, updatePassword ] = useState("");
     const [ userName, updateUserName ] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onEmailRegister = (event) =>{
         updateEmail(event.target.value)
@@ -18,23 +19,29 @@ const Register = ({onRouteChange, loadUserData}) =>{
     }
 
     const onRegisterSubmit = () =>{
-        fetch("http://localhost:3000/register", {
-            method: "post",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                email: registerEmail,
-                password: registerPassword,
-                name: userName,
+        if (registerEmail.trim() === '' || registerPassword.trim() === '' || userName.trim() === '') {
+            setErrorMessage('Please insert your details above');
+            return;
+        }
+        else{
+            fetch("http://localhost:3000/register", {
+                method: "post",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: registerEmail,
+                    password: registerPassword,
+                    name: userName,
+                })
             })
-        })
-        .then(response => response.json())
-        .then(user => {
-            if (user.id){
-                loadUserData(user);
-                onRouteChange("face-detection-app")
+            .then(response => response.json())
+            .then(user => {
+                if (user.id){
+                    loadUserData(user);
+                    onRouteChange("face-detection-app")
+                }
+            }) 
+            .catch(error => console.log(error));
             }
-        }) 
-        .catch(error => console.log(error));
         }
 
     return(
@@ -45,23 +52,23 @@ const Register = ({onRouteChange, loadUserData}) =>{
                     <legend className="f1 fw6 ph0 mh0 center">Register</legend>
 
                     <div className="mt3">
-                        <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
+                        <label className="db fw6 lh-copy f6 w-100" htmlFor="name">Name</label>
                         <input onChange={onUsernameRegister}
-                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="name" name="name"  id="name"/>
+                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="text" name="name"  id="name" required={true}/>
                     </div>
 
                     <div className="mt3">
-                        <label className="db fw6 lh-copy f6" htmlFor="email-address" required>Email</label>
+                        <label className="db fw6 lh-copy f6 w-100" htmlFor="email-address">Email</label>
                         <input onChange={onEmailRegister} 
-                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="email" name="email-address"  id="email-address" required/>
+                        className="pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="email" name="email-address"  id="email-address"/>
                     </div>
 
                     <div className="mv3">
-                        <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
+                        <label className="db fw6 lh-copy f6 w-100" htmlFor="password">Password</label>
                         <input onChange={onPasswordRegister}
-                        className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password" required/>
+                        className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password"/>
                     </div>
-                    
+                    {errorMessage && <p className="red f5 b">{errorMessage}</p>}
                     </fieldset>
                     <div className="">
                     <input onClick={onRegisterSubmit}

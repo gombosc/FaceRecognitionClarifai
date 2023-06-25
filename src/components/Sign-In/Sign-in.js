@@ -4,6 +4,7 @@ import "./Sign-in.css";
 const SignIn = ({onRouteChange, loadUserData}) =>{
     const [ signInEmail, setSignInEmail ] = useState("");
     const [ signInPassword, setSignInPassword ] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const onEmailSignIn = (event) =>{
         setSignInEmail(event.target.value)
@@ -14,23 +15,33 @@ const SignIn = ({onRouteChange, loadUserData}) =>{
     }
 
     const onLoginSubmit = () =>{
-        fetch("http://localhost:3000/signIn", {
-            method: "post",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                email: signInEmail,
-                password: signInPassword
+        if (signInEmail.trim() === "" || signInPassword.trim() === "") {
+            setErrorMessage('Please add your information above');
+            return
+        }
+        else{
+            fetch("http://localhost:3000/signIn", {
+                method: "post",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: signInEmail,
+                    password: signInPassword
+                })
             })
-        })
-        .then(response => response.json())
-        .then(user => {
-            // Does the user exist? Did we receive it from the server?
-            if (user.id){
-                loadUserData(user);
-                onRouteChange("face-detection-app")
+            .then(response => response.json())
+            .then(user => {
+                // Does the user exist? Did we receive it from the server?
+                if (user.id){
+                    loadUserData(user);
+                    onRouteChange("face-detection-app")
+                }
+                else{
+                    setErrorMessage('Wrong email or password');
+                    return
+                }
+            }) 
+            .catch(error => console.log(error));
             }
-        }) 
-        .catch(error => console.log(error));
         }
 
     return(
@@ -49,13 +60,14 @@ const SignIn = ({onRouteChange, loadUserData}) =>{
                         <input onChange={onPasswordlSignIn}
                         className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password" />
                     </div>
+                    {errorMessage && <p className="red f5 b">{errorMessage}</p>}
                     </fieldset>
                     <div className="">
                     <input onClick={onLoginSubmit}
                         className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
                     </div>
                     <div className="lh-copy mt3">
-                        <p onClick={ () => onRouteChange("register") } className="f6 link dim black db pointer">Register</p>
+                        <p onClick={ () => onRouteChange("register") } className="f5 link dim black db pointer">Register</p>
                     </div>
                 </div>
             </main>

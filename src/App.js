@@ -98,7 +98,7 @@
     const onInputChange = (event) => {
       setInputText(event.target.value);
     }
-
+    
     const onButtonSubmit =() =>{
       setImageUrl(inputText);
       fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(inputText))
