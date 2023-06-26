@@ -1,10 +1,22 @@
 import React, {useState, useEffect} from "react";
+import PowerModeInput from "power-mode-input";
 
 const Register = ({onRouteChange, loadUserData}) =>{
     const [ registerEmail, updateEmail ] = useState("");
     const [ registerPassword, updatePassword ] = useState("");
     const [ userName, updateUserName ] = useState("");
     const [errorMessage, setErrorMessage] = useState('');
+
+    const powerInputSettings = {
+        height: 5,
+        tha: [0, 360],
+        g: 3,
+        num: 5,
+        radius: 8,
+        circle: true,
+        alpha: [0.75, 0.1],
+        color: 'random'
+        }
 
     useEffect( () => {
         const handleKeyPress = (event) => {
@@ -14,7 +26,14 @@ const Register = ({onRouteChange, loadUserData}) =>{
                 onRegisterSubmit();
             }
         }
-        
+        const userName = document.getElementById("name");
+        const emailAddress = document.getElementById("email-address");
+        const password = document.getElementById("password")
+
+        PowerModeInput.make(userName, powerInputSettings);
+        PowerModeInput.make(emailAddress, powerInputSettings);
+        PowerModeInput.make(password);
+
         document.addEventListener("keydown", handleKeyPress)
 
         // We return a cleanup function from the effect by using return. This cleanup function removes the event listener when the component unmounts. This ensures that we don't have any memory leaks
