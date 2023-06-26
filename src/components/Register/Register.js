@@ -1,10 +1,28 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 const Register = ({onRouteChange, loadUserData}) =>{
     const [ registerEmail, updateEmail ] = useState("");
     const [ registerPassword, updatePassword ] = useState("");
     const [ userName, updateUserName ] = useState("");
     const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect( () => {
+        const handleKeyPress = (event) => {
+            if( event.key === "Enter") 
+            {
+                console.log("Pressed Enter");
+                onRegisterSubmit();
+            }
+        }
+        
+        document.addEventListener("keydown", handleKeyPress)
+
+        // We return a cleanup function from the effect by using return. This cleanup function removes the event listener when the component unmounts. This ensures that we don't have any memory leaks
+        return () =>{
+            document.removeEventListener("keydown", handleKeyPress)
+        }
+        // the dependency array is omitted so the effect runs every render
+    });
 
     const onEmailRegister = (event) =>{
         updateEmail(event.target.value)
@@ -20,7 +38,7 @@ const Register = ({onRouteChange, loadUserData}) =>{
 
     const onRegisterSubmit = () =>{
         if (registerEmail.trim() === '' || registerPassword.trim() === '' || userName.trim() === '') {
-            setErrorMessage('Please insert your details above');
+            setErrorMessage('Form is empty');
             return;
         }
         else{
@@ -68,6 +86,7 @@ const Register = ({onRouteChange, loadUserData}) =>{
                         <input onChange={onPasswordRegister}
                         className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password"/>
                     </div>
+                    
                     {errorMessage && <p className="red f5 b">{errorMessage}</p>}
                     </fieldset>
                     <div className="">

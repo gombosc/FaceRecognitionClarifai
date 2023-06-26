@@ -1,10 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sign-in.css";
 
 const SignIn = ({onRouteChange, loadUserData}) =>{
     const [ signInEmail, setSignInEmail ] = useState("");
     const [ signInPassword, setSignInPassword ] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [ errorMessage, setErrorMessage ] = useState("");
+
+          // If Enter key pressed call Submit Function
+    useEffect( () => {
+        const handleKeyPress = (event) => {
+            if( event.key === "Enter") 
+            {
+                console.log("Pressed Enter");
+                onLoginSubmit();
+            }
+        }
+        
+        document.addEventListener("keydown", handleKeyPress)
+
+        // We return a cleanup function from the effect by using return. This cleanup function removes the event listener when the component unmounts. This ensures that we don't have any memory leaks
+        return () =>{
+            document.removeEventListener("keydown", handleKeyPress)
+        }
+        // the dependency array is omitted so the effect runs every render
+    });
 
     const onEmailSignIn = (event) =>{
         setSignInEmail(event.target.value)
@@ -16,10 +35,11 @@ const SignIn = ({onRouteChange, loadUserData}) =>{
 
     const onLoginSubmit = () =>{
         if (signInEmail.trim() === "" || signInPassword.trim() === "") {
-            setErrorMessage('Please add your information above');
-            return
+            setErrorMessage('Form is empty');
+            return;
         }
         else{
+            console.log("Running Fetch Function");
             fetch("http://localhost:3000/signIn", {
                 method: "post",
                 headers: {"Content-Type": "application/json"},
@@ -60,7 +80,9 @@ const SignIn = ({onRouteChange, loadUserData}) =>{
                         <input onChange={onPasswordlSignIn}
                         className="b pa2 input-reset ba bg-transparent hover-bg-white hover-black w-100" type="password" name="password"  id="password" />
                     </div>
+                    {/* Show error if data is wrong or empty */}
                     {errorMessage && <p className="red f5 b">{errorMessage}</p>}
+                    
                     </fieldset>
                     <div className="">
                     <input onClick={onLoginSubmit}

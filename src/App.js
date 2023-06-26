@@ -98,7 +98,7 @@
     const onInputChange = (event) => {
       setInputText(event.target.value);
     }
-    
+
     const onButtonSubmit =() =>{
       setImageUrl(inputText);
       fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(inputText))
@@ -147,7 +147,7 @@
           num={150}
           type="square"
           bg={{
-            background: "#997026",
+            background: "#08587D",
             position: "fixed", /* this took way too much to figure out */
             zIndex: -1,
             top: 0,
