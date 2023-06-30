@@ -1,5 +1,5 @@
   import React from "react";
-  import { useState, useEffect} from "react";  
+  import { useState} from "react";  
   import ParticlesBg from 'particles-bg';
   import './App.css';
   import Navigation from "./components/Navigation/Navigation";
@@ -11,41 +11,40 @@
   import Register from "./components/Register/Register";
   import "tachyons";
 
-  const returnClarifaiRequestOptions = (imageUrl) =>{
-    const PAT = '0b25009030b548bc8c18d8f6a57a83e6';
-    const USER_ID = 'gombosc';       
-    const APP_ID = 'Face-Detection-App';
-    // Change these to whatever model and image URL you want to use
-    const MODEL_ID = 'face-detection';   
-    const IMAGE_URL = imageUrl;
+// First Method to handle Clarifai API request
+  // const returnClarifaiRequestOptions = (imageUrl) =>{
+  //   const USER_ID = 'gombosc';       
+  //   const APP_ID = 'Face-Detection-App';
+  //   // Change these to whatever model and image URL you want to use  
+  //   const IMAGE_URL = imageUrl;
 
-    const raw = JSON.stringify({
-      "user_app_id": {
-          "user_id": USER_ID,
-          "app_id": APP_ID
-      },
-      "inputs": [
-          {
-              "data": {
-                  "image": {
-                      "url": IMAGE_URL
-                  }
-              }
-          }
-      ]
-  });
+  //   const raw = JSON.stringify({
+  //     "user_app_id": {
+  //         "user_id": USER_ID,
+  //         "app_id": APP_ID,
+  //     },
+  //     "inputs": [
+  //         {
+  //             "data": {
+  //                 "image": {
+  //                     "url": IMAGE_URL
+  //                 }
+  //             }
+  //         }
+  //     ]
+  // });
 
-  const requestOptions = {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Key ' + PAT
-      },
-      body: raw
-  };
+  // const requestOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //         'Accept': 'application/json',
+  //         'Authorization': 'Key ' + 'PAT'
+  //     },
+  //     body: raw
+  // };
 
-  return requestOptions;
-  }
+  // return requestOptions;
+  // }
 
   const initialUserState = {
     id: "",
@@ -101,8 +100,18 @@
 
     const onButtonSubmit =() =>{
       setImageUrl(inputText);
-      fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(inputText))
+
+      // Fetch Clarifai API and send input in the request body so that the API can use it
+      fetch("http://localhost:3000/imageurl", {
+        method: "post",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({
+                  input : inputText
+                })
+      })
+      // fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(inputText)
           .then(response => response.json())
+
           .then(boundingBox =>{
             if(boundingBox){
                 fetch("http://localhost:3000/image/", {
