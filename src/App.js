@@ -73,6 +73,7 @@
       joined: data.joined
       })
     }
+
    
     const calculateRecognitionBox = (boundingBoxData) =>{
      const clarifaiFace = boundingBoxData.outputs[0].data.regions[0].region_info.bounding_box;
@@ -102,7 +103,7 @@
       setImageUrl(inputText);
 
       // Fetch Clarifai API and send input in the request body so that the API can use it
-      fetch("http://localhost:3000/imageurl", {
+      fetch("https://face-recognition-server-0d10949f370d.herokuapp.com/imageurl", {
         method: "post",
               headers: {"Content-Type": "application/json"},
               body: JSON.stringify({
@@ -114,7 +115,7 @@
 
           .then(boundingBox =>{
             if(boundingBox){
-                fetch("http://localhost:3000/image/", {
+                fetch("https://face-recognition-server-0d10949f370d.herokuapp.com/image", {
               method: "put",
               headers: {"Content-Type": "application/json"},
               body: JSON.stringify({
@@ -167,7 +168,7 @@
           { route === "face-detection-app" ? 
               <>
                   <Navigation isSignedIn = {isSignedIn} onRouteChange = {onRouteChange} route = {route} />
-                  <Logo />
+                  <Logo userName ={userData.name} />
                   <Rank name={userData.name} entries={userData.entries} />
                   <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
                   <FaceRecognition imageUrl={imageUrl} recognitionBox={recognitionBox} />

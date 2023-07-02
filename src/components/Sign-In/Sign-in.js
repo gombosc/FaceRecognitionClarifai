@@ -60,7 +60,7 @@ const SignIn = ({onRouteChange, loadUserData}) =>{
         }
         else{
             console.log("Running Fetch Function");
-            fetch("http://localhost:3000/signIn", {
+            fetch("https://face-recognition-server-0d10949f370d.herokuapp.com/signIn", {
                 method: "post",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({

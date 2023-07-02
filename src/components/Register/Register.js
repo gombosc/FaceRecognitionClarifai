@@ -61,7 +61,7 @@ const Register = ({onRouteChange, loadUserData}) =>{
             return;
         }
         else{
-            fetch("http://localhost:3000/register", {
+            fetch("https://face-recognition-server-0d10949f370d.herokuapp.com/register", {
                 method: "post",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({

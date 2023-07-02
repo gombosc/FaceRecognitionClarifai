@@ -11,3 +11,19 @@
     height: 122px;
     box-shadow: 0px 20px 20px 3px rgb(234, 234, 234);
 }
+
+.logoContainer{
+   position: relative;
+   text-align: center;
+}
+
+.userName{
+    position: absolute;
+    top: -40px; /* Adjust this value to position the user name vertically */
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bolder; /* Adjust the font weight as needed */
+    font-size: 1.8rem;
+    color: #d3d6e6;
+    text-transform: capitalize;
+}
